@@ -1,14 +1,24 @@
 local wezterm = require "wezterm"
 
 return {
+    default_cwd = "d:\\workspace",
     -- Font
     font = wezterm.font("FiraCode NF"),
-    font_size = 12.0,
+    font_size = 14.0,
     -- Cursor
     default_cursor_style = "SteadyBar",
     -- Start Cmderr: cmd.exe /k %CMDER_ROOT%\\vendor\\init.bat
     default_prog = {"cmd.exe", "/k", "%CMDER_ROOT%\\vendor\\init.bat"},
     color_scheme = "Gruvbox Dark",
+    -- padding
+    window_padding = {
+        left = 5,
+        right = 2,
+        top = 0,
+        bottom = 0
+    },
+    -- tab config
+    hide_tab_bar_if_only_one_tab = true,
     -- timeout_milliseconds defaults to 1000 and can be omitted
     leader = {key = "a", mods = "CTRL", timeout_milliseconds = 1000},
     -- mappings
