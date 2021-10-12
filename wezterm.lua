@@ -12,10 +12,10 @@ return {
     color_scheme = "Gruvbox Dark",
     -- padding
     window_padding = {
-        left = 5,
-        right = 2,
         top = 0,
-        bottom = 0
+        bottom = 0,
+        left = 5,
+        right = 2
     },
     -- tab config
     hide_tab_bar_if_only_one_tab = true,
