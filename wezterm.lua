@@ -3,13 +3,14 @@ local wezterm = require("wezterm")
 return {
 	default_cwd = "d:\\workspace",
 	-- Font
-	font = wezterm.font("FiraCode NF"),
+	font = wezterm.font("FiraMono Nerd Font"),
 	font_size = 14.0,
 	-- Cursor
 	default_cursor_style = "SteadyBar",
 	-- Start Cmderr: cmd.exe /k %CMDER_ROOT%\\vendor\\init.bat
 	default_prog = { "cmd.exe", "/k", "%CMDER_ROOT%\\vendor\\init.bat" },
-	color_scheme = "Gruvbox dark, hard (base16)",
+	-- color_scheme = "Gruvbox dark, hard (base16)",
+	color_scheme = "Modus-Vivendi",
 	-- padding
 	window_padding = {
 		top = 0,
@@ -34,6 +35,12 @@ return {
 		{ key = "6", mods = "ALT", action = { SendKey = { key = "6", mods = "ALT" } } },
 		{ key = "7", mods = "ALT", action = { SendKey = { key = "7", mods = "ALT" } } },
 		{ key = "8", mods = "ALT", action = { SendKey = { key = "8", mods = "ALT" } } },
+
+		{
+			key = "Enter",
+			mods = "ALT",
+			action = wezterm.action.DisableDefaultAssignment,
+		},
 
 		-- Create panes
 		{
