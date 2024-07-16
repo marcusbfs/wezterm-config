@@ -1,9 +1,9 @@
 local wezterm = require("wezterm")
+local mux = wezterm.mux
 
 local is_linux = wezterm.target_triple:find("linux") ~= nil
 
 local font_ = wezterm.font(is_linux and "DejaVu Sans Mono" or "FiraMono Nerd Font")
-
 local default_cwd_ = is_linux and "~/workspace" or "d:\\workspace"
 
 local commonOpts = {
@@ -68,5 +68,10 @@ local commonOpts = {
 if not is_linux then
 	commonOpts.default_prog = { "cmd.exe", "/k", "%CMDER_ROOT%\\vendor\\init.bat" }
 end
+
+wezterm.on("gui-startup", function()
+	local tab, pane, window = mux.spawn_window({})
+	window:gui_window():maximize()
+end)
 
 return commonOpts
