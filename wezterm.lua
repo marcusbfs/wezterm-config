@@ -1,14 +1,18 @@
 local wezterm = require("wezterm")
 
-return {
-	default_cwd = "d:\\workspace",
+local is_linux = wezterm.target_triple:find("linux") ~= nil
+
+local font_ = wezterm.font(is_linux and "DejaVu Sans Mono" or "FiraMono Nerd Font")
+
+local default_cwd_ = is_linux and "~/workspace" or "d:\\workspace"
+
+local commonOpts = {
+	default_cwd = default_cwd_,
 	-- Font
-	font = wezterm.font("FiraMono Nerd Font"),
+	font = font_,
 	font_size = 14.0,
 	-- Cursor
 	default_cursor_style = "SteadyBar",
-	-- Start Cmderr: cmd.exe /k %CMDER_ROOT%\\vendor\\init.bat
-	default_prog = { "cmd.exe", "/k", "%CMDER_ROOT%\\vendor\\init.bat" },
 	-- color_scheme = "Gruvbox dark, hard (base16)",
 	color_scheme = "Modus-Vivendi",
 	-- padding
@@ -60,3 +64,9 @@ return {
 		{ key = "a", mods = "LEADER|CTRL", action = wezterm.action({ SendString = "\x01" }) },
 	},
 }
+
+if not is_linux then
+	commonOpts.default_prog = { "cmd.exe", "/k", "%CMDER_ROOT%\\vendor\\init.bat" }
+end
+
+return commonOpts
