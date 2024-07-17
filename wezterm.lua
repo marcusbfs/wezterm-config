@@ -3,17 +3,30 @@ local mux = wezterm.mux
 
 local is_linux = wezterm.target_triple:find("linux") ~= nil
 
-local font_ = wezterm.font(is_linux and "DejaVu Sans Mono" or "FiraMono Nerd Font")
+local font_ = wezterm.font(is_linux and "JetBrains Mono" or "FiraMono Nerd Font")
 local default_cwd_ = is_linux and "~/workspace" or "d:\\workspace"
+
+wezterm.on("toggle-ligature", function(window, pane)
+	local overrides = window:get_config_overrides() or {}
+	if not overrides.harfbuzz_features then
+		-- If we haven't overridden it yet, then override with ligatures disabled
+		overrides.harfbuzz_features = { "calt=0", "clig=0", "liga=0" }
+	else
+		-- else we did already, and we should disable out override now
+		overrides.harfbuzz_features = nil
+	end
+	window:set_config_overrides(overrides)
+end)
 
 local commonOpts = {
 	default_cwd = default_cwd_,
 	-- Font
 	font = font_,
 	font_size = 14.0,
+	-- harfbuzz_features = { 'calt=0', 'clig=0', 'liga=0' }, -- Disable font ligatures.
 	-- Cursor
 	default_cursor_style = "SteadyBar",
-	-- color_scheme = "Gruvbox dark, hard (base16)",
+
 	color_scheme = "Modus-Vivendi",
 	-- padding
 	window_padding = {
@@ -62,6 +75,8 @@ local commonOpts = {
 		{ key = "c", mods = "LEADER", action = wezterm.action({ CloseCurrentPane = { confirm = true } }) },
 		-- Send "CTRL-A" to the terminal when pressing CTRL-A, CTRL-A
 		{ key = "a", mods = "LEADER|CTRL", action = wezterm.action({ SendString = "\x01" }) },
+		-- Toggle ligatures
+		{ key = "t", mods = "LEADER", action = wezterm.action.EmitEvent("toggle-ligature") },
 	},
 }
 
