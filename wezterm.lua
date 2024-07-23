@@ -18,6 +18,24 @@ wezterm.on("toggle-ligature", function(window, pane)
 	window:set_config_overrides(overrides)
 end)
 
+wezterm.on("window-focus-changed", function(window, pane)
+	local window_dims = window:get_dimensions()
+	-- wezterm.log_info(
+	-- 	"FOCUS called!",
+	-- 	string.format("Is focused: %s", window:is_focused()),
+	-- 	string.format("Is full screen: %s", window_dims.is_full_screen)
+	-- )
+	if window_dims.is_full_screen then
+		window:toggle_fullscreen()
+		-- wezterm.log_info(
+		-- 	string.format(
+		-- 		"force toggle full screen and maximize. New is full screen: %s",
+		-- 		window:get_dimensions().is_full_screen
+		-- 	)
+		-- )
+	end
+end)
+
 local commonOpts = {
 	default_cwd = default_cwd_,
 	-- Font
