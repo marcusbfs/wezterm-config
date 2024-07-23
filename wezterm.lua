@@ -4,7 +4,7 @@ local mux = wezterm.mux
 local is_linux = wezterm.target_triple:find("linux") ~= nil
 
 local font_ = wezterm.font(is_linux and "JetBrains Mono" or "FiraMono Nerd Font")
-local default_cwd_ = is_linux and "~/workspace" or "d:\\workspace"
+local default_cwd_ = is_linux and (wezterm.home_dir .. "/workspace") or "d:\\workspace"
 
 wezterm.on("toggle-ligature", function(window, pane)
 	local overrides = window:get_config_overrides() or {}
@@ -18,33 +18,18 @@ wezterm.on("toggle-ligature", function(window, pane)
 	window:set_config_overrides(overrides)
 end)
 
-wezterm.on("window-focus-changed", function(window, pane)
-	local window_dims = window:get_dimensions()
-	-- wezterm.log_info(
-	-- 	"FOCUS called!",
-	-- 	string.format("Is focused: %s", window:is_focused()),
-	-- 	string.format("Is full screen: %s", window_dims.is_full_screen)
-	-- )
-	if window_dims.is_full_screen then
-		window:toggle_fullscreen()
-		-- wezterm.log_info(
-		-- 	string.format(
-		-- 		"force toggle full screen and maximize. New is full screen: %s",
-		-- 		window:get_dimensions().is_full_screen
-		-- 	)
-		-- )
-	end
-end)
-
 local commonOpts = {
+	enable_wayland = false,
+	window_decorations = "RESIZE",
+
 	default_cwd = default_cwd_,
+
 	-- Font
 	font = font_,
 	font_size = 14.0,
-	-- harfbuzz_features = { 'calt=0', 'clig=0', 'liga=0' }, -- Disable font ligatures.
+
 	-- Cursor
 	default_cursor_style = "SteadyBar",
-
 	color_scheme = "Modus-Vivendi",
 	-- padding
 	window_padding = {
@@ -100,13 +85,8 @@ local commonOpts = {
 			key = "L",
 			mods = "LEADER|SHIFT",
 			action = wezterm.action_callback(function(window, pane)
-				-- Split the current pane vertically with a new pane at the bottom
 				window:perform_action(wezterm.action.SplitVertical({ domain = "CurrentPaneDomain" }), pane)
-
-				-- Resize the new pane to take ~30% of the screen
-				window:perform_action(wezterm.action.AdjustPaneSize({ "Down", 20 }), pane)
-
-				-- Switch to the top pane
+				window:perform_action(wezterm.action.AdjustPaneSize({ "Down", 13 }), pane)
 				window:perform_action(wezterm.action.ActivatePaneDirection("Up"), pane)
 			end),
 		},
