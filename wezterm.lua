@@ -95,6 +95,21 @@ local commonOpts = {
 		{ key = "a", mods = "LEADER|CTRL", action = wezterm.action({ SendString = "\x01" }) },
 		-- Toggle ligatures
 		{ key = "t", mods = "LEADER", action = wezterm.action.EmitEvent("toggle-ligature") },
+		-- Handy layout
+		{
+			key = "L",
+			mods = "LEADER|SHIFT",
+			action = wezterm.action_callback(function(window, pane)
+				-- Split the current pane vertically with a new pane at the bottom
+				window:perform_action(wezterm.action.SplitVertical({ domain = "CurrentPaneDomain" }), pane)
+
+				-- Resize the new pane to take ~30% of the screen
+				window:perform_action(wezterm.action.AdjustPaneSize({ "Down", 20 }), pane)
+
+				-- Switch to the top pane
+				window:perform_action(wezterm.action.ActivatePaneDirection("Up"), pane)
+			end),
+		},
 	},
 }
 
