@@ -26,7 +26,7 @@ local commonOpts = {
 
 	-- Font
 	font = font_,
-	font_size = 14.0,
+	font_size = 13.0,
 
 	-- Cursor
 	default_cursor_style = "SteadyBar",
