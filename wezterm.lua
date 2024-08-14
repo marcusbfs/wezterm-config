@@ -1,4 +1,5 @@
 local wezterm = require("wezterm")
+local act = wezterm.action
 local mux = wezterm.mux
 
 local is_linux = wezterm.target_triple:find("linux") ~= nil
@@ -46,15 +47,6 @@ local commonOpts = {
 	keys = {
 		-- Disable ctrl-l
 		-- {key = "l", mods = "CTRL", action = wezterm.action {SendString = "clear"}},
-		-- Disable alt+number to change tabs. I used this in vim
-		{ key = "1", mods = "ALT", action = { SendKey = { key = "1", mods = "ALT" } } },
-		{ key = "2", mods = "ALT", action = { SendKey = { key = "2", mods = "ALT" } } },
-		{ key = "3", mods = "ALT", action = { SendKey = { key = "3", mods = "ALT" } } },
-		{ key = "4", mods = "ALT", action = { SendKey = { key = "4", mods = "ALT" } } },
-		{ key = "5", mods = "ALT", action = { SendKey = { key = "5", mods = "ALT" } } },
-		{ key = "6", mods = "ALT", action = { SendKey = { key = "6", mods = "ALT" } } },
-		{ key = "7", mods = "ALT", action = { SendKey = { key = "7", mods = "ALT" } } },
-		{ key = "8", mods = "ALT", action = { SendKey = { key = "8", mods = "ALT" } } },
 
 		{
 			key = "Enter",
@@ -93,13 +85,27 @@ local commonOpts = {
 	},
 }
 
-if not is_linux then
-	commonOpts.default_prog = { "cmd.exe", "/k", "%CMDER_ROOT%\\vendor\\init.bat" }
+for i = 1, 8 do
+	-- CTRL+ number to activate that tab
+	table.insert(commonOpts.keys, {
+		key = tostring(i),
+		mods = "CTRL",
+		action = act.ActivateTab(i - 1),
+	})
+	-- F1 through F8 to activate that tab
+	table.insert(commonOpts.keys, {
+		key = "F" .. tostring(i),
+		action = act.ActivateTab(i - 1),
+	})
 end
 
-wezterm.on("gui-startup", function()
-	local tab, pane, window = mux.spawn_window({})
-	window:gui_window():maximize()
-end)
+if not is_linux then
+	commonOpts.default_prog = { "cmd.exe", "/k", "%CMDER_ROOT%\\vendor\\init.bat" }
+
+	wezterm.on("gui-startup", function()
+		local tab, pane, window = mux.spawn_window({})
+		window:gui_window():maximize()
+	end)
+end
 
 return commonOpts
