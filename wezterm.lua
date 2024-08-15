@@ -4,7 +4,7 @@ local mux = wezterm.mux
 
 local is_linux = wezterm.target_triple:find("linux") ~= nil
 
-local font_ = wezterm.font(is_linux and "JetBrains Mono" or "FiraMono Nerd Font")
+local font_ = is_linux and "JetBrains Mono" or "FiraMono Nerd Font"
 local default_cwd_ = is_linux and (wezterm.home_dir .. "/workspace") or "d:\\workspace"
 
 wezterm.on("toggle-ligature", function(window, pane)
@@ -26,8 +26,10 @@ local commonOpts = {
 	default_cwd = default_cwd_,
 
 	-- Font
-	font = font_,
+	font = wezterm.font_with_fallback {font_, "FontAwesome", "Symbols Nerd Font Mono"},
+	-- font = font_,
 	font_size = 13.0,
+	warn_about_missing_glyphs = false,
 
 	-- Cursor
 	default_cursor_style = "SteadyBar",
