@@ -11,7 +11,7 @@ local resurrect = wezterm.plugin.require("https://github.com/MLFlexer/resurrect.
 
 local is_linux = wezterm.target_triple:find("linux") ~= nil
 
-local font_ = wezterm.font("CaskaydiaMono Nerd Font", { weight = "Regular" })
+local font_ = { family = "CaskaydiaMono Nerd Font", weight = "Regular" }
 local font_size_ = 12
 
 local default_cwd_ = is_linux and (wezterm.home_dir .. "/workspace") or "d:\\workspace"
